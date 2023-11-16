@@ -56,3 +56,23 @@ public class BST //LinkedList of Contacts
     current = q;
     return false;
   }
+
+  public boolean insert(Contact data, int key)
+   {
+	 BSTNode p, q = current;
+
+   if (findkey(key)) { current = q; return false; }
+
+   p = new BSTNode(data,key);
+
+	  if(isEmpty()) 
+      { root = current = p; return true }
+	  else 
+     {
+		 if(k.compareTo(current.getKey())==-1) current.setLeft(p);
+     else current.setRight(p);
+     current = p;
+     return true; 
+	  }
+	}
+    
