@@ -11,7 +11,8 @@ public class BSTNode //Nodes that contain Contact as data
       right = left = null;
       key = k;
    }
-    public BSTNode(Contact s, String k, BSTNode1 l, BSTNode1 r)
+   
+   public BSTNode(Contact s, String k, BSTNode l, BSTNode r)
    {
       data = s;
       right = r;
@@ -19,27 +20,27 @@ public class BSTNode //Nodes that contain Contact as data
       key = k;
    }
 
-    public int compareTo(Object s) //compares contact names alphabetically
+   public int compareTo(Object s) //compares contact names alphabetically
    {
-    Contact str = (Contact)s;
-    int firstLength = this.getData().getName().length();  
-    int secondLength = str.getData().getName().length();  
-    int minLength = Math.min(firstLength, secondLength);
-    int i = 0;  
-    while(i < minLength) 
-    {  
-     char ch1 = this.getDate().getName().charAt(i);  
-     char ch2 = str.getData().getName().charAt(i);  
-     if(ch1 != ch2) 
+     Contact str = (Contact)s;
+     int firstLength = this.getData().getName().length();  
+     int secondLength = str.getName().length();  
+     int minLength = Math.min(firstLength, secondLength);
+     int i = 0;  
+     while(i < minLength) 
      {  
-      if((int)(ch1-ch2) > 0)
-       return 1;
-      else
-       return -1;
-     }
-     i++;  
-   }  
-   return 0;  
+      char ch1 = this.getData().getName().charAt(i);  
+      char ch2 = str.getName().charAt(i);  
+      if(ch1 != ch2) 
+      {  
+       if((int)(ch1-ch2) > 0)
+        return 1;
+       else
+        return -1;
+      }
+      i++;  
+    }  
+    return 0;  
    } 
    
    public Contact getData()
@@ -51,6 +52,7 @@ public class BSTNode //Nodes that contain Contact as data
    {
      this.left = left;
    }
+   
    public void setRight(BSTNode right)
    {
      this.right = right;
@@ -60,15 +62,20 @@ public class BSTNode //Nodes that contain Contact as data
    {
      return right;
    }
+   
    public BSTNode getLeft()
    {
      return left;
    }
-   public int getKey(){
-    return key;
+   
+   public String getKey()
+   {
+     return key;
    }
-   public void setKey(int k){
-    key=k;
+   
+   public void setKey(String k)
+   {
+     key = k;
    }
 
 }
