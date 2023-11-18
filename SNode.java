@@ -9,7 +9,7 @@ public class SNode
     next = null;
   }
   
-  public Node(BSTNode val) 
+  public SNode(BSTNode val) 
   { 
     data = val;
     next = null; 
