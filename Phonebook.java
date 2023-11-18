@@ -6,11 +6,11 @@ public class Phonebook
  {
    
    
-   LinkedListContact Phonebook = new LinkedListContact();
+   BST Phonebook = new BST();
    LinkedListEvent Events = new LinkedListEvent();
    
    key.useDelimiter("\n");
-   System.out.println("Welcome to the Linked Tree Phonebook!");
+   System.out.println("Welcome to the Binary Search Tree Phonebook!");
    boolean menuFlag = true;
    
    do 
@@ -19,14 +19,14 @@ public class Phonebook
       System.out.println("1.Add a contact");
       System.out.println("2.Search for a contact");
       System.out.println("3.Delete a contact");
-      System.out.println("4.Schedule an event");
-      System.out.println("5.Print event details");
+      System.out.println("4.Schedule an event/appointment");
+      System.out.println("5.Print event/appointment details");
       System.out.println("6.Print contacts by first name");
-      System.out.println("7.Print all events alphabetically");
+      System.out.println("7.Print all events and appointments alphabetically");
       System.out.println("8.Print all contacts attending an event");
       System.out.println("9.Add a contact to a scheduled event");
-      System.out.println("10.Delete a scheduled event");
-      System.out.println("11.Print all contacts");
+      System.out.println("10.Delete a scheduled event or appointment");
+      System.out.println("11.Print all contacts in phonebook");
       System.out.println("12.Exit");
       System.out.println();
       System.out.print("Enter your choice: ");
@@ -349,7 +349,7 @@ public class Phonebook
 
 }
  
- //contacts by first name method; assumes names are first followed by last
+/** //contacts by first name method; assumes names are first followed by last
  public static void displayByFirstName(LinkedListContact list, String firstName)
  {
   list.findFirst();
@@ -379,7 +379,7 @@ public class Phonebook
       }
       System.out.println(list.retrieve().getContactList().retrieve().toString()); //prints last element
     } 
- }
+ } */
  
 } 
  
