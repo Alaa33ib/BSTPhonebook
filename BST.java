@@ -191,22 +191,20 @@ public boolean search(String attribute, String criteria) //searches for a contac
        
       case "Phone Number":
       
-      if(temp == null)
-         return false;
-      nodes.push(root);
-      while(!nodes.empty()) 
+      while (temp != null || !nodes.empty())
       {
-        temp = nodes.peek();
+        while (temp !=  null)
+        {
+          nodes.push(temp);
+          temp = temp.getLeft();
+        }
+        temp = nodes.pop();
         if(temp.getData().getPhone().equalsIgnoreCase(attribute)) 
         { 
           System.out.println(temp.getData().toString());
           return true;
         }
-        nodes.pop();
-        if(temp.getRight() != null) 
-           nodes.push(temp.getRight());
-        if(temp.getLeft() != null) 
-           nodes.push(temp.getLeft());
+        temp = temp.getRight();
       }
       return false;
       
