@@ -7,7 +7,7 @@ public class Phonebook
    
    
    BST Phonebook = new BST();
-   LinkedListEvent Events = new LinkedListEvent();
+   //LinkedListEvent Events = new LinkedListEvent();
    
    key.useDelimiter("\n");
    System.out.println("Welcome to the Binary Search Tree Phonebook!");
@@ -147,7 +147,7 @@ public class Phonebook
           }
          break;
          
-         
+         /**
          case 3:
          
          System.out.println("Enter delete criteria: ");
@@ -323,13 +323,13 @@ public class Phonebook
           System.out.println("Event couldn't be found, deletion is not successful!");
           System.out.println();
         break;
-        
+        */
         
         case 11:
         
         Phonebook.display();
         System.out.println();
-        break;
+        break; 
 
         
         case 12:
