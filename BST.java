@@ -1,8 +1,7 @@
 public class BST //Binary Search Tree of Contacts
 {
 
-  private BSTNode root;
-  private BSTNode current;  
+  private BSTNode root, current;  
 
   public BST()
   {
@@ -13,7 +12,7 @@ public class BST //Binary Search Tree of Contacts
   {
     return (root == null);
   }
-
+/*
   public void findRoot()
   {
     current = root;
@@ -27,15 +26,14 @@ public class BST //Binary Search Tree of Contacts
   public void findRight()
   {
     current = current.getRight();
-  }
-
+  }*/
 
   public Contact retrieve()
   {
     return current.getData();
   }
 
-  public boolean findkey(String key)
+  /**public boolean findKey(String key)
   {
     BSTNode p = root, q = root;
 
@@ -44,27 +42,26 @@ public class BST //Binary Search Tree of Contacts
 
     while (p != null)
     {
-      q = p;
-      if(p.compareTo(key) == 0) 
+      q = p;    
+      if(p.getKey().compareTo(key) == 0) 
       { 
         current = p; 
         return true; 
-      }
+      }     
       else if(p.compareTo(key) == 1) 
-        p = p.getLeft();
+        p = p.getLeft(); 
       else 
         p = p.getRight();
     }
-
     current = q;
     return false;
-  }
+  }*/
 
-  public boolean insert(Contact data, String key)
+  /**public boolean insert(Contact data, String key)
   {
 	 BSTNode p, q = current;
 
-    if(findkey(key)) 
+    if(findKey(key)) 
     { 
       current = q; 
       return false; 
@@ -81,13 +78,42 @@ public class BST //Binary Search Tree of Contacts
     {
 		if(key.compareTo(current.getKey()) == -1)
         current.setLeft(p);
-     else 
+      else 
         current.setRight(p);
      current = p;
      return true; 
 	 }
+  }*/
+  
+  
+  public void insertContact(Contact data)
+  {
+	 BSTNode temp, p = root, q = root;
+
+    temp = new BSTNode(data, data.getName());
+
+	 if(isEmpty()) 
+    { 
+      root = current = temp; 
+      return; 
+    }
+    while (p != null)
+    {   
+      q = p;
+      if(p.compareTo(data.getName()) >= 0) 
+         p = p.getLeft(); 
+      else 
+         p = p.getRight();
+    }   
+    if(q.compareTo(data.getName()) >= 0)
+        q.setLeft(temp);
+    else 
+        q.setRight(temp);
+     current = temp;
   }
-    
+  
+   
+  
  /** public boolean removeKey(String key)
   {
     Boolean removed = new Boolean(false);
@@ -145,103 +171,138 @@ public boolean search(String attribute, String criteria) //searches for a contac
 
    switch(criteria) 
    {
+   
       case "Name":
    
-        while(temp != null)
-        {
-     	    if(temp.getData().getName().equalsIgnoreCase(attribute)) 
-          { 
-            System.out.println(temp.getData().toString());
-            current = temp;
-            return true;
-          }
-     	    else if(temp.getKey().compareTo(attribute) == -1)
-           temp = temp.getRight();
-          else if(temp.getKey().compareTo(attribute) == 1)
-           temp = temp.getLeft();        
-     	  }
-     	  return false;
+      while(temp != null)
+      {
+     	  if(temp.getData().getName().equalsIgnoreCase(attribute)) 
+        { 
+          System.out.println(temp.getData().toString());
+          return true;
+        }
+     	  else if(temp.compareTo(attribute) >= 0)
+          temp = temp.getLeft();
+        else
+          temp = temp.getRight();        
+     	}
+     	return false;
+      
        
       case "Phone Number":
       
-        while(temp != null)
-        {
-     	    if(temp.getData().getPhone().equalsIgnoreCase(attribute)) 
-          { 
-            System.out.println(temp.getData().toString());
-            current = temp;
-            return true;
-          } 
-          if(temp.getRight() != null)
-            nodes.push(temp.getRight());
-          else if(temp.getLeft() != null)
-            temp = temp.getLeft();
-          else
-            temp = nodes.pop();  
+      if(temp == null)
+         return false;
+      nodes.push(root);
+      while(!nodes.empty()) 
+      {
+        temp = nodes.peek();
+        if(temp.getData().getPhone().equalsIgnoreCase(attribute)) 
+        { 
+          System.out.println(temp.getData().toString());
+          return true;
         }
-     	  return false;
+        nodes.pop();
+        if(temp.getRight() != null) 
+           nodes.push(temp.getRight());
+        if(temp.getLeft() != null) 
+           nodes.push(temp.getLeft());
+      }
+      return false;
+      
        
       case "Email Address":
      	
-  
-        while(temp != null)
-        {
-     	    if(temp.getData().getEmail().equalsIgnoreCase(attribute)) 
-          { 
-            System.out.println(temp.getData().toString());
-            flag = true;
-          } 
-          if(temp.getRight() != null)
-            nodes.push(temp.getRight());
-          else if(temp.getLeft() != null)
-            temp = temp.getLeft();
-          else
-            temp = nodes.pop();  
-       }
-       return flag;
-   
-     case "Address":
- 
-       while(temp != null)
-       {
-         if(temp.getData().getAddress().equalsIgnoreCase(attribute)) 
-         { 
-           System.out.println(temp.getData().toString());
-           flag = true;
-         } 
-         if(temp.getRight() != null)
-           nodes.push(temp.getRight());
-         else if(temp.getLeft() != null)
-           temp = temp.getLeft();
-         else
-           temp = nodes.pop();  
-      }
-      return flag;
-      
-    case "Birthday":
- 
-      while(temp != null)
+      if(temp == null)
+         return false;
+      nodes.push(root);
+      while(!nodes.empty()) 
       {
-        if(temp.getData().getBirthday().equalsIgnoreCase(attribute)) 
+        temp = nodes.peek();
+        if(temp.getData().getEmail().equalsIgnoreCase(attribute)) 
         { 
           System.out.println(temp.getData().toString());
           flag = true;
-        } 
-        if(temp.getRight() != null)
-          nodes.push(temp.getRight());
-        else if(temp.getLeft() != null)
-          temp = temp.getLeft();
-        else
-          temp = nodes.pop();  
-     }
-     return flag;
-      
-   default: 
+        }         
+        nodes.pop();
+        if(temp.getRight() != null) 
+           nodes.push(temp.getRight());
+        if(temp.getLeft() != null) 
+           nodes.push(temp.getLeft());
+      }
+      return flag;
+       
+   
+      case "Address":
+ 
+      if(temp == null)
+         return false;
+      nodes.push(root);
+      while(!nodes.empty()) 
+      {
+        temp = nodes.peek();
+        if(temp.getData().getEmail().equalsIgnoreCase(attribute)) 
+        { 
+          System.out.println(temp.getData().toString());
+          flag = true;
+        }
+        nodes.pop();
+        if(temp.getRight() != null) 
+           nodes.push(temp.getRight());
+        if(temp.getLeft() != null) 
+           nodes.push(temp.getLeft());
+      }
+      return flag;
      
-     System.out.println("Please make sure criteria input is correct."); 
-     return false; 
+             
+      case "Birthday":
+ 
+      if(temp == null)
+        return false;
+      nodes.push(root);
+      while(!nodes.empty()) 
+      {
+        temp = nodes.peek();
+        if(temp.getData().getEmail().equalsIgnoreCase(attribute)) 
+        { 
+          System.out.println(temp.getData().toString());
+          flag = true;
+        }
+        nodes.pop();
+        if(temp.getRight() != null) 
+          nodes.push(temp.getRight());
+        if(temp.getLeft() != null) 
+          nodes.push(temp.getLeft());
+      }
+      return flag;
+        
+      default: 
+     
+      System.out.println("Please make sure criteria input is correct."); 
+      return false; 
    }
 }
+
+public void display()
+{
+   if(isEmpty())
+     return;
+   Stack s = new Stack();
+   BSTNode temp = root;
+   
+   while (temp != null || !s.empty())
+   {
+     while (temp !=  null)
+     {
+       s.push(temp);
+       temp = temp.getLeft();
+     }
+     temp = s.pop();
+     System.out.println(temp.getData().toString());
+     temp = temp.getRight();
+  }
 }
+
+} 
 
    
