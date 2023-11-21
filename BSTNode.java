@@ -1,9 +1,9 @@
 public class BSTNode //Nodes that contain Contact as data
 {
 
-     private Contact data;
-     private BSTNode right, left;
-     private String key;
+   private Contact data;
+   private BSTNode right, left;
+   private String key;
 
    public BSTNode(Contact s, String k)
    {
@@ -22,15 +22,15 @@ public class BSTNode //Nodes that contain Contact as data
 
    public int compareTo(Object s) //compares contact names alphabetically
    {
-     Contact str = (Contact)s;
+     String str = (String)s;
      int firstLength = this.getData().getName().length();  
-     int secondLength = str.getName().length();  
+     int secondLength = str.length();  
      int minLength = Math.min(firstLength, secondLength);
      int i = 0;  
      while(i < minLength) 
      {  
       char ch1 = this.getData().getName().charAt(i);  
-      char ch2 = str.getName().charAt(i);  
+      char ch2 = str.charAt(i);  
       if(ch1 != ch2) 
       {  
        if((int)(ch1-ch2) > 0)
