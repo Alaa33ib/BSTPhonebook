@@ -113,56 +113,7 @@ public class BST //Binary Search Tree of Contacts
   }
   
    
-  
- /** public boolean removeKey(String key)
-  {
-    Boolean removed = new Boolean(false);
 
-    BSTNode p;
-
-    p = removeAux(key, root, removed);
-
-    current = root = p;
-    return removed; //idk mate
-  }
-
-  public BSTNode removeAux(String key, BSTNode p, Boolean flag)
-  {
-    BSTNode q, child = null;
-    if (p==null) return null;
-    if (key.compareTo(p.getKey())==-1) p.setLeft(removeAux(key,p.getLeft(),flag));
-    else if (key.compareTo(p.getKey())==1) p.setRight(removeAux(key,p.getRight(),flag));
-    else 
-    {
-      flag.set(true);
-      if (p.getLeft()!=null && p.getRight()!=null)
-      {
-        q = findMin(p.getRight());
-        p.setKey(q.getKey());
-        p.setData(q.getData());
-        p.setRight(removeAux(q.getKey(), p.getRight(), flag));
-      }
-      else 
-      {
-      if (p.getRight()==null) child = p.getLeft();
-      else if (p.getLeft()==null) child = p.getRight();
-      return child;
-      }
-    }
-    return p;
-
-  }
-
-  private BSTNode findMin(BSTNode p)
-  {
-    if(p==null) return null;
-    while(p.getLeft()!=null)
-    {
-      p = p.getLeft();
-    }
-    return p;
-  }*/
- 
 public boolean search(String attribute, String criteria) //searches for a contact in the list based on a specific criteria
 {
    boolean flag = false; 
@@ -300,7 +251,59 @@ public void display()
      temp = temp.getRight();
   }
 }
+public boolean deleteContact(String name) 
+{
+  String str = name;
+  BSTNode p = root;
+  BSTNode q = null; // Parent of p
+  while (p != null) 
+  {
+    if (p.compareTo(name) > 0)
+    {
+      q = p;
+      p = p.getLeft();
+    }
+    else if (p.compareTo(name) < 0) 
+    {
+      q = p;
+      p = p.getRight();
+    }
+    else //p.compareTo(name) = 0; name is found
+    { 
+      if ((p.getLeft() != null) && (p.getRight() != null)) //p has two children
+      {    
+        BSTNode min = p.getRight();
+        q = p;
+        while (min.getLeft() != null) //looks for minimum in right subtree, leftmost node in right subtree
+        {
+          q = min;
+          min = min.getLeft();
+        }
+        p.setKey(min.getKey());
+        p.setData(min.getData());
+        str = min.getKey();
+        p = min;
+      }
+      if(p.getLeft() != null) //p has one child
+        p = p.getLeft();
+      else //p has one or no children
+        p = p.getRight();
+      if(q == null)//No parent for p, root must change
+        root = p; 
+      else
+      { 
+        if(q.compareTo(str) > 0)
+          q.setLeft(p);
+        else
+          q.setRight(p);
+      }
+      current = root;
+      return true;
+    }
+  }
+  return false;// Not found
+}
 
-} 
+}  
 
    
