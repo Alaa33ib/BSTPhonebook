@@ -147,50 +147,24 @@ public class Phonebook
           }
          break;
          
-         /**
+         
          case 3:
          
-         System.out.println("Enter delete criteria: ");
-         System.out.println("1.Name");
-         System.out.println("2.Phone Number");
-         System.out.print("Enter your choice: ");
-         criteria = key.nextInt();
-         if (criteria == 1)
+         System.out.print("Enter the contact's name: ");
+         name = key.next();
+         System.out.println();
+         if(Phonebook.deleteContact(name)) //method will look for the contact that will be deleted and return true if the operation is successful
          { 
-          System.out.print("Enter the contact's name: ");
-          name = key.next();
-          System.out.println();
-          if(Phonebook.deleteContact(name, "Name")) //method will look for the contact that will be deleted and return true if the operation is successful
-          { 
-            Events.deleteAll(name, "Name"); //method in LinkedListEvent that deletes contacts from events based on contact's name or phone number
-            System.out.println("Contact successfully deleted!");
-          }
-          else
-           System.out.println("Contact couldn't be found, deletion is not successful!");
-          System.out.println();
-         }
-         else if (criteria == 2)
-         { 
-          System.out.print("Enter the contact's phone number: ");
-          phoneNum = key.next();
-          System.out.println();
-          if(Phonebook.deleteContact(phoneNum, "Phone Number"))
-          { 
-            Events.deleteAll(phoneNum, "Phone Number");
-            System.out.println("Contact successfully deleted!");
-          }
-          else
-            System.out.println("Contact couldn't be found, deletion is not successful!");
-          System.out.println();
+           //Events.deleteAll(name, "Name"); //method in LinkedListEvent that deletes contacts from events based on contact's name or phone number
+           System.out.println("Contact successfully deleted!");
          }
          else
-         {
-           System.out.println();
-           System.out.println("You entered a number outside the allowed range, try again!\n");
-         }
+           System.out.println("Contact couldn't be found, deletion is not successful!");
+         System.out.println();
          break;
          
          
+         /**
          case 4: 
      
          System.out.print("Enter the event's title: ");
@@ -255,7 +229,7 @@ public class Phonebook
         System.out.println();   
         break; 
         
-        
+        */
         case 6:
         
         System.out.print("Enter the first name: ");
@@ -265,7 +239,7 @@ public class Phonebook
         System.out.println();
         break;
         
-        
+        /**
         case 7: 
         
         System.out.println();
@@ -349,20 +323,44 @@ public class Phonebook
 
 }
  
-/** //contacts by first name method; assumes names are first followed by last
- public static void displayByFirstName(LinkedListContact list, String firstName)
+//contacts by first name method; assumes names are first followed by last ; doesnt work needs rewriting
+ public static void displayByFirstName(BST list, String firstName)
  {
-  list.findFirst();
-  while(!list.last())
+  boolean flag = false;
+  list.findRoot();
+  while(!list.isLeaf())
   { 
-    if(firstName.equalsIgnoreCase(list.retrieve().getName().substring(0,list.retrieve().getName().indexOf(' '))))
+    if(list.retrieve().getName().compareTo(firstName) > 0)
+      list.findLeft();
+    else if(list.retrieve().getName().compareTo(firstName) < 0)
+      list.findRight();  
+    else if(firstName.equalsIgnoreCase(list.retrieve().getName().substring(0,list.retrieve().getName().indexOf(' '))))
+    {
       System.out.println(list.retrieve().toString());
-    list.findNext();
-  }
+      flag = true;
+      //break; //first instance of first name is found, start traversal
+    }  
+  } /**
+  if(flag)
+  {
+   Stack<String> s = new Stack<String>();
+   String temp = list.retrieve().getName();
+   while (!list.isLeaf() || !s.empty())
+   {
+     while (!list.isLeaf())
+     {
+       s.push(list.retrieve().getName());
+       list.findLeft();
+     }
+     if(firstName.equalsIgnoreCase(s.peek().substring(0, s.peek().indexOf(' '))))
+         System.out.println(s.pop());
+     list.findRight();
+   }
+  }*/
   if(firstName.equalsIgnoreCase(list.retrieve().getName().substring(0,list.retrieve().getName().indexOf(' ')))) //checks last element
     System.out.println(list.retrieve().toString());
  }
- 
+/**
  //contacts by shared event method
  public static void contactsByEvent(LinkedListEvent list, String eventName)
  {
