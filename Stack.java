@@ -1,6 +1,6 @@
-public class Stack
+public class Stack<T>
 {
-  private SNode top;
+  private SNode<T> top;
   
   public Stack() 
   { 
@@ -12,23 +12,23 @@ public class Stack
     return (top == null);
   }
   
-  public void push(BSTNode e)
+  public void push(T e)
   {
     SNode tmp = new SNode(e); 
     tmp.next = top;
     top = tmp;
   }
   
-  public BSTNode pop()
+  public T pop()
   {
-    BSTNode e = top.data;
+    T e = top.data;
     top = top.next;
     return e; 
   }
 
-  public BSTNode peek() 
+  public T peek() 
   {
-     BSTNode tmp = pop();
+     T tmp = pop();
      push(tmp);
      return tmp; 
   }
