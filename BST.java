@@ -12,7 +12,7 @@ public class BST //Binary Search Tree of Contacts
   {
     return (root == null);
   }
-/*
+
   public void findRoot()
   {
     current = root;
@@ -26,7 +26,12 @@ public class BST //Binary Search Tree of Contacts
   public void findRight()
   {
     current = current.getRight();
-  }*/
+  }
+  
+  public boolean isLeaf()
+  {
+    return (current.getLeft() == null) && (current.getRight() == null);
+  }
 
   public Contact retrieve()
   {
@@ -118,7 +123,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
 {
    boolean flag = false; 
    BSTNode temp = root;
-   Stack nodes = new Stack();
+   Stack<BSTNode> nodes = new Stack<BSTNode>();
 
    switch(criteria) 
    {
@@ -232,11 +237,11 @@ public boolean search(String attribute, String criteria) //searches for a contac
    }
 }
 
-public void display()
+public void display() //in-order traversal -> alphabetically
 {
    if(isEmpty())
      return;
-   Stack s = new Stack();
+   Stack<BSTNode> s = new Stack<BSTNode>();
    BSTNode temp = root;
    
    while (temp != null || !s.empty())
@@ -251,6 +256,8 @@ public void display()
      temp = temp.getRight();
   }
 }
+
+
 public boolean deleteContact(String name) 
 {
   String str = name;
@@ -304,6 +311,4 @@ public boolean deleteContact(String name)
   return false;// Not found
 }
 
-}  
-
-   
+}
