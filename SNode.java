@@ -1,6 +1,6 @@
-public class SNode
+public class SNode<T>
 { 
-  public BSTNode data; 
+  public T data; 
   public SNode next;
    
   public SNode() 
@@ -9,7 +9,7 @@ public class SNode
     next = null;
   }
   
-  public SNode(BSTNode val) 
+  public SNode(T val) 
   { 
     data = val;
     next = null; 
