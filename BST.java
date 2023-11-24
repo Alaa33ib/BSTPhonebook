@@ -310,5 +310,37 @@ public boolean deleteContact(String name)
   }
   return false;// Not found
 }
-
-}
+	
+public void displayByFirstName(String firstName)
+{
+  boolean flag = false;
+  BSTNode temp = root;
+  while(temp != null)
+  { 
+    if(firstName.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' ')))) //first instance of first name is found, start traversal
+    { 
+      flag = true;
+      break;
+    }
+    else if(temp.getData().getName().compareTo(firstName) < 0)
+      temp = temp.getRight();
+    else if(temp.getData().getName().compareTo(firstName) > 0)
+      temp = temp.getLeft();
+  } 
+  if(flag)
+  {
+    Stack<BSTNode> s = new Stack<BSTNode>();  
+    while (temp != null || !s.empty())
+    {
+      while (temp !=  null)
+      { 
+        s.push(temp);
+        temp = temp.getLeft();
+      }
+      temp = s.pop();
+      if(firstName.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' '))))
+         System.out.println(temp.getData().toString());
+      temp = temp.getRight();
+    }
+  }
+}}
