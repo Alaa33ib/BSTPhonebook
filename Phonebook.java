@@ -324,42 +324,10 @@ public class Phonebook
 }
  
 //contacts by first name method; assumes names are first followed by last ; doesnt work needs rewriting
- public static void displayByFirstName(BST list, String firstName)
- {
-  boolean flag = false;
-  list.findRoot();
-  while(!list.isLeaf())
-  { 
-    if(list.retrieve().getName().compareTo(firstName) > 0)
-      list.findLeft();
-    else if(list.retrieve().getName().compareTo(firstName) < 0)
-      list.findRight();  
-    else if(firstName.equalsIgnoreCase(list.retrieve().getName().substring(0,list.retrieve().getName().indexOf(' '))))
-    {
-      System.out.println(list.retrieve().toString());
-      flag = true;
-      //break; //first instance of first name is found, start traversal
-    }  
-  } /**
-  if(flag)
-  {
-   Stack<String> s = new Stack<String>();
-   String temp = list.retrieve().getName();
-   while (!list.isLeaf() || !s.empty())
-   {
-     while (!list.isLeaf())
-     {
-       s.push(list.retrieve().getName());
-       list.findLeft();
-     }
-     if(firstName.equalsIgnoreCase(s.peek().substring(0, s.peek().indexOf(' '))))
-         System.out.println(s.pop());
-     list.findRight();
-   }
-  }*/
-  if(firstName.equalsIgnoreCase(list.retrieve().getName().substring(0,list.retrieve().getName().indexOf(' ')))) //checks last element
-    System.out.println(list.retrieve().toString());
- }
+public static void displayByFirstName(BST list, String name)
+{
+  list.displayByFirstName(name);
+} 
 /**
  //contacts by shared event method
  public static void contactsByEvent(LinkedListEvent list, String eventName)
