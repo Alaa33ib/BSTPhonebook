@@ -1,6 +1,6 @@
-public class Stack<T>
+public class Stack<T> //used for bst traversal
 {
-  private SNode<T> top;
+  private Node<T> top;
   
   public Stack() 
   { 
@@ -14,15 +14,15 @@ public class Stack<T>
   
   public void push(T e)
   {
-    SNode tmp = new SNode(e); 
-    tmp.next = top;
+    Node tmp = new Node(e); 
+    tmp.setNext(top);
     top = tmp;
   }
   
   public T pop()
   {
-    T e = top.data;
-    top = top.next;
+    T e = top.getData();
+    top = top.getNext();
     return e; 
   }
 
