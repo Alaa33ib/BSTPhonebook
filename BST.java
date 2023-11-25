@@ -27,72 +27,16 @@ public class BST //Binary Search Tree of Contacts
   {
     current = current.getRight();
   }
-  
-  public boolean isLeaf()
-  {
-    return (current.getLeft() == null) && (current.getRight() == null);
-  }
 
   public Contact retrieve()
   {
     return current.getData();
   }
 
-  /**public boolean findKey(String key)
-  {
-    BSTNode p = root, q = root;
-
-    if(isEmpty()) 
-      return false;
-
-    while (p != null)
-    {
-      q = p;    
-      if(p.getKey().compareTo(key) == 0) 
-      { 
-        current = p; 
-        return true; 
-      }     
-      else if(p.compareTo(key) == 1) 
-        p = p.getLeft(); 
-      else 
-        p = p.getRight();
-    }
-    current = q;
-    return false;
-  }*/
-
-  /**public boolean insert(Contact data, String key)
-  {
-	 BSTNode p, q = current;
-
-    if(findKey(key)) 
-    { 
-      current = q; 
-      return false; 
-    }
-
-    p = new BSTNode(data, key);
-
-	 if(isEmpty()) 
-    { 
-      root = current = p; 
-      return true; 
-    }
-	 else 
-    {
-		if(key.compareTo(current.getKey()) == -1)
-        current.setLeft(p);
-      else 
-        current.setRight(p);
-     current = p;
-     return true; 
-	 }
-  }*/
+ //end of ADT methods
   
-  
-  public void insertContact(Contact data)
-  {
+ public void insertContact(Contact data)
+ {
 	 BSTNode temp, p = root, q = root;
 
     temp = new BSTNode(data, data.getName());
@@ -115,12 +59,12 @@ public class BST //Binary Search Tree of Contacts
     else 
         q.setRight(temp);
      current = temp;
-  }
+ }
   
    
 
-public boolean search(String attribute, String criteria) //searches for a contact in the list based on a specific criteria
-{
+ public boolean search(String attribute, String criteria) //searches for a contact in the BST based on a specific criteria
+ {
    boolean flag = false; 
    BSTNode temp = root;
    Stack<BSTNode> nodes = new Stack<BSTNode>();
@@ -135,6 +79,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
      	  if(temp.getData().getName().equalsIgnoreCase(attribute)) 
         { 
           System.out.println(temp.getData().toString());
+          current = temp;
           return true;
         }
      	  else if(temp.compareTo(attribute) >= 0)
@@ -145,7 +90,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
      	return false;
       
        
-      case "Phone Number":
+      case "Phone Number": //utilizes in-order traversal
       
       while (temp != null || !nodes.empty())
       {
@@ -158,6 +103,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
         if(temp.getData().getPhone().equalsIgnoreCase(attribute)) 
         { 
           System.out.println(temp.getData().toString());
+          current = temp;
           return true;
         }
         temp = temp.getRight();
@@ -165,7 +111,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
       return false;
       
        
-      case "Email Address":
+      case "Email Address": //utilizes pre-order traversal
      	
       if(temp == null)
          return false;
@@ -187,7 +133,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
       return flag;
        
    
-      case "Address":
+      case "Address": //utilizes pre-order traversal
  
       if(temp == null)
          return false;
@@ -209,7 +155,7 @@ public boolean search(String attribute, String criteria) //searches for a contac
       return flag;
      
              
-      case "Birthday":
+      case "Birthday": //utilizes pre-order traversal
  
       if(temp == null)
         return false;
@@ -235,10 +181,10 @@ public boolean search(String attribute, String criteria) //searches for a contac
       System.out.println("Please make sure criteria input is correct."); 
       return false; 
    }
-}
-
-public void display() //in-order traversal -> alphabetically
-{
+ }
+ 
+ public void display() //in-order traversal -> alphabetically
+ {
    if(isEmpty())
      return;
    Stack<BSTNode> s = new Stack<BSTNode>();
@@ -255,14 +201,14 @@ public void display() //in-order traversal -> alphabetically
      System.out.println(temp.getData().toString());
      temp = temp.getRight();
   }
-}
+ }
 
 
-public boolean deleteContact(String name) 
-{
+ public boolean deleteContact(String name) 
+ {
   String str = name;
   BSTNode p = root;
-  BSTNode q = null; // Parent of p
+  BSTNode q = null; 
   while (p != null) 
   {
     if (p.compareTo(name) > 0)
@@ -275,13 +221,13 @@ public boolean deleteContact(String name)
       q = p;
       p = p.getRight();
     }
-    else //p.compareTo(name) = 0; name is found
+    else //p.compareTo(name) == 0; name is found
     { 
       if ((p.getLeft() != null) && (p.getRight() != null)) //p has two children
       {    
         BSTNode min = p.getRight();
         q = p;
-        while (min.getLeft() != null) //looks for minimum in right subtree, leftmost node in right subtree
+        while (min.getLeft() != null) //looks for minimum in right subtree; leftmost node in right subtree
         {
           q = min;
           min = min.getLeft();
@@ -295,7 +241,7 @@ public boolean deleteContact(String name)
         p = p.getLeft();
       else //p has one or no children
         p = p.getRight();
-      if(q == null)//No parent for p, root must change
+      if(q == null)
         root = p; 
       else
       { 
@@ -308,7 +254,43 @@ public boolean deleteContact(String name)
       return true;
     }
   }
-  return false;// Not found
+  return false;//not found; so node couldn't be deleted
+ }
+
+ public void displayByFirstName(String firstName)
+ {
+  boolean flag = false;
+  BSTNode temp = root;
+  while(temp != null)
+  { 
+    if(firstName.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' ')))) //first instance of first name is found, start traversal
+    { 
+      flag = true;
+      break;
+    }
+    else if(temp.getData().getName().compareTo(firstName) < 0)
+      temp = temp.getRight();
+    else if(temp.getData().getName().compareTo(firstName) > 0)
+      temp = temp.getLeft();
+  } 
+  if(flag)
+  {
+    Stack<BSTNode> s = new Stack<BSTNode>();  
+    while (temp != null || !s.empty())
+    {
+      while (temp !=  null)
+      { 
+        s.push(temp);
+        temp = temp.getLeft();
+      }
+      temp = s.pop();
+      if(firstName.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' '))))
+         System.out.println(temp.getData().toString());
+      temp = temp.getRight();
+    }
+  }
+ } 
+ 
 }
 	
 public void displayByFirstName(String firstName)
