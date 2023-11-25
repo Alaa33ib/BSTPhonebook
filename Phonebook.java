@@ -7,7 +7,7 @@ public class Phonebook
    
    
    BST Phonebook = new BST();
-   //LinkedListEvent Events = new LinkedListEvent();
+   LinkedListEvent Events = new LinkedListEvent();
    
    key.useDelimiter("\n");
    System.out.println("Welcome to the Binary Search Tree Phonebook!");
@@ -23,7 +23,7 @@ public class Phonebook
       System.out.println("5.Print event/appointment details");
       System.out.println("6.Print contacts by first name");
       System.out.println("7.Print all events and appointments alphabetically");
-      System.out.println("8.Print all contacts attending an event");
+      System.out.println("8.Print contacts attending an event");
       System.out.println("9.Add a contact to a scheduled event");
       System.out.println("10.Delete a scheduled event or appointment");
       System.out.println("11.Print all contacts in phonebook");
@@ -53,9 +53,9 @@ public class Phonebook
         }
         System.out.print("Enter the contact's email address: ");
         String email = key.next();
-        System.out.print("Enter the contact's address: ");
+        System.out.print("Enter the contact's address(Street, City, Zip): ");
         String address = key.next();
-        System.out.print("Enter the contact's birthday: ");
+        System.out.print("Enter the contact's birthday(DD-MM-YYYY): ");
         String birthday = key.next();
         System.out.print("Enter any notes for the contact: ");
         String notes = key.next();
@@ -155,7 +155,7 @@ public class Phonebook
          System.out.println();
          if(Phonebook.deleteContact(name)) //method will look for the contact that will be deleted and return true if the operation is successful
          { 
-           //Events.deleteAll(name, "Name"); //method in LinkedListEvent that deletes contacts from events based on contact's name or phone number
+           Events.deleteAll(name, "Name"); //method in LinkedListEvent that deletes contacts from events based on contact's name or phone number
            System.out.println("Contact successfully deleted!");
          }
          else
@@ -164,36 +164,92 @@ public class Phonebook
          break;
          
          
-         /**
+         
          case 4: 
-     
-         System.out.print("Enter the event's title: ");
-         String title = key.next();
-         if(Events.searchE(title, "Title"))
-         {
-           System.out.println("Event already exists, look above, addition is rejected.\n");
-           continue;
+         
+         int count = 0;
+         System.out.println("Enter type:");
+         System.out.println("1.Event");
+         System.out.println("2.Appointment");
+         System.out.print("Enter your choice: ");
+         int type = key.nextInt();
+         if(type == 1)
+         {   
+           System.out.print("Enter the event's title: ");
+           String title = key.next();
+           System.out.print("Enter the contacts' name(s) delimited by commas: ");
+           String contactNames = key.next();          
+           System.out.print("Enter the event's date and time(DD/MM/YYYY HH:MM): ");
+           String dateAndTime = key.next();
+           System.out.print("Enter the event's location: ");
+           String location = key.next();
+           System.out.println();
+           if(Events.isNotATimeConflict(dateAndTime)) 
+           {
+             contactNames += ",";
+             String temp, cname = contactNames.substring(0,contactNames.indexOf(","));
+             boolean allE = true;
+             if(Phonebook.search(cname, "Name"))
+             {                    
+                System.out.println("Contact exists!");
+                Events.insertEvent(new Event(title, Phonebook.retrieve(), dateAndTime, location, true));
+             }
+             else
+             {
+                System.out.println("Make sure all contacts exist!");
+                allE = false;
+             }
+             count = cname.length()+1;
+             temp = contactNames.substring(contactNames.indexOf(",")+1);
+             while(count < contactNames.length() && allE)
+             { 
+               cname = temp.substring(0,temp.indexOf(","));
+               if(Phonebook.search(cname, "Name")) 
+               {
+                  System.out.println("Contact exists!");
+                  Events.addContactToEvent(Phonebook.retrieve());
+               }
+               else
+               {
+                  System.out.println("Make sure all contacts exist!");
+                  allE = false;
+               }
+               count += cname.length()+1;
+               temp = temp.substring(temp.indexOf(",")+1);
+             } 
+             if(allE)
+               System.out.println("Event scheduled successfully!");
+             else
+               Events.deleteEvent(title, dateAndTime);
+           }
+           else
+             System.out.println("Event couldn't be scheduled because of a time conflict!"); 
          }
-         System.out.print("Enter the contact name: ");
-         String contactName = key.next();          
-         System.out.print("Enter the event's date and time(MM/DD/YYYY HH:MM): ");
-         String dateAndTime = key.next();
-         System.out.print("Enter the event's location: ");
-         String location = key.next();
-         System.out.println();
-         if(Events.isNotATimeConflict(dateAndTime)) 
-         {
-          if(Phonebook.search(contactName, "Name")) 
-          { 
-            System.out.println("Event will be scheduled with the contact above.");
-            Events.insertEvent(new Event(title, Phonebook.retrieve(), dateAndTime, location));
-            System.out.println("Event scheduled successfully!");
-          }
-          else
-            System.out.println("Contact not found, cannot schedule event!");
+         else if(type == 2)
+         { 
+           System.out.print("Enter the appointment's title: ");
+           String title = key.next();
+           System.out.print("Enter the contact's name: ");
+           String contactName = key.next();          
+           System.out.print("Enter the appointments's date and time(MM/DD/YYYY HH:MM): ");
+           String dateAndTime = key.next();
+           System.out.print("Enter the appointments's location: ");
+           String location = key.next();
+           System.out.println();
+           if(Events.isNotATimeConflict(dateAndTime)) 
+           {
+             if(Phonebook.search(contactName, "Name"))
+             {
+               System.out.println("Appointment will be scheduled with the contact above!");
+               Events.insertEvent(new Event(title, Phonebook.retrieve(), dateAndTime, location, false));
+               System.out.println("Appointment scheduled successfully!");
+             }
+             else
+                System.out.println("Make sure the contact exists in the phonebook!");
+           }
+           else
+              System.out.println("Appointment couldn't be scheduled because of a time conflict!");           
          }
-         else
-          System.out.println("Event couldn't be scheduled because of a time conflict!"); 
         System.out.println();
         break; 
         
@@ -202,34 +258,34 @@ public class Phonebook
         
         System.out.println("Enter search criteria:");
         System.out.println("1.Contact name");
-        System.out.println("2.Event title");
+        System.out.println("2.Event/appointment title");
         System.out.print("Enter your choice: ");
         criteria = key.nextInt();
         if (criteria == 1)
         {
          System.out.print("Enter the contact's name: ");
-         contactName = key.next();
+         String contactName = key.next();
          System.out.println();
          if(!Phonebook.search(contactName, "Name"))
            System.out.println("Contact with this name is not found!");
          else
          {
-          System.out.println("The contact exists, look above, and these are the event(s) scheduled with it: "); 
+          System.out.println("The contact exists, look above, and these are the event(s) and appointment(s) scheduled with it: "); 
           Events.searchE(contactName, "Contact Name");
          }
         }    
         else if (criteria == 2)
         {
-         System.out.print("Enter the event's title: ");
-         title = key.next();
+         System.out.print("Enter the event's or appointment's title: ");
+         String title = key.next();
          System.out.println();
          if(!Events.searchE(title, "Title")) //case it is found will be printed by the method itself 
-           System.out.println("Event not found!"); 
+           System.out.println("Event/appointment not found!"); 
         } 
         System.out.println();   
         break; 
         
-        */
+      
         case 6:
         
         System.out.print("Enter the first name: ");
@@ -239,7 +295,7 @@ public class Phonebook
         System.out.println();
         break;
         
-        /**
+     
         case 7: 
         
         System.out.println();
@@ -250,38 +306,61 @@ public class Phonebook
         
         case 8:
         
-        System.out.print("Please enter event title: ");
-        title = key.next();
-        System.out.println();
-        contactsByEvent(Events, title);
-        System.out.println();
+        System.out.print("Please enter event's date and time(DD/MM/YYYY HH:MM): ");
+        String dAndT = key.next();  
+        if(Events.isNotATimeConflict(dAndT))
+          System.out.print("\nEvent with this date and time doesn't exist!");
+        else
+        {
+          if(!Events.retrieve().getType())
+            System.out.println("\nWhat is scheduled at this time is an appointment!\n");
+          else
+          {         
+            System.out.print("Please enter event's title: ");
+            String title = key.next();         
+            contactsByEvent(Events, title, dAndT);
+            System.out.println();
+          }
+        }
         break; 
         
         
         case 9:
         
-        System.out.print("Please enter event title: ");
-        title = key.next();
-        System.out.println();
-        if(!Events.searchE(title, "Title"))
-          System.out.println("Event not found!");
+        System.out.print("Please enter event's date and time(DD/MM/YYYY HH:MM): ");
+        dAndT = key.next();  
+        if(Events.isNotATimeConflict(dAndT))
+          System.out.print("\nEvent with this date and time doesn't exist!");
         else
         {
-          System.out.println("Event found look above!");
-          System.out.print("Enter contact name: ");
-          name = key.next();
-          System.out.println();
-          if(Phonebook.search(name, "Name")) //case it is found will be printed by the method itself! 
-          {   
-            System.out.println("Contact exists, look above!");
-            if(Events.addContactToEvent(Phonebook.retrieve()))
-              System.out.println("Contact added to the event successfully!");
-            else
-              System.out.println("Contact already exists in this event's contact list, look above, addition is rejected!");          
-          }
+          if(!Events.retrieve().getType())
+            System.out.println("\nWhat is scheduled at this time is an appointment, you cannot add any contacts!");
           else
-            System.out.println("Contact doesn't exist!");
-        }
+          {        
+            System.out.print("Please enter event title: ");
+            String title = key.next();
+            System.out.println();
+            if(!Events.searchEUnique(title, dAndT))
+              System.out.println("Event not found!");
+            else
+            {
+              System.out.println("Event found look above!");
+              System.out.print("Enter contact name: ");
+              name = key.next();
+              System.out.println();
+              if(Phonebook.search(name, "Name")) //case it is found will be printed by the method itself! 
+              {   
+                System.out.println("Contact exists, look above!");
+                if(Events.addContactToEvent(Phonebook.retrieve()))
+                  System.out.println("Contact added to the event successfully!");
+                else
+                  System.out.println("Contact already exists in this event's contact list, look above, addition is rejected!");          
+              }
+              else
+                System.out.println("Contact doesn't exist!");
+            }
+          }
+        }     
         System.out.println();
         break;
         
@@ -289,15 +368,17 @@ public class Phonebook
         case 10:
         
         System.out.print("Please enter event title: ");
-        title = key.next();
+        String title = key.next();
+        System.out.print("Please enter event's date and time(DD/MM/YYYY HH:MM): ");
+        dAndT = key.next();  
         System.out.println();
-        if(Events.deleteEvent(title)) //method will look for the event that will be deleted and return true if the operation is successful
+        if(Events.deleteEvent(title, dAndT)) //method will look for the event that will be deleted and return true if the operation is successful
           System.out.println("Event successfully deleted!");
         else
           System.out.println("Event couldn't be found, deletion is not successful!");
           System.out.println();
         break;
-        */
+        
         
         case 11:
         
@@ -322,17 +403,16 @@ public class Phonebook
    System.out.println("Thank you for using the phonebook!");
 
 }
- 
-//contacts by first name method; assumes names are first followed by last ; doesnt work needs rewriting
-public static void displayByFirstName(BST list, String name)
+public static void displayByFirstName(BST list, String name) //make root public and implement method here
 {
   list.displayByFirstName(name);
 } 
-/**
+
+
  //contacts by shared event method
- public static void contactsByEvent(LinkedListEvent list, String eventName)
+ public static void contactsByEvent(LinkedListEvent list, String eventName, String dAndT)
  {
-    if(!list.searchE(eventName,"Title"))
+    if(!list.searchEUnique(eventName,dAndT))
       System.out.println("Event not found!");
     else
     {
@@ -345,7 +425,8 @@ public static void displayByFirstName(BST list, String name)
       }
       System.out.println(list.retrieve().getContactList().retrieve().toString()); //prints last element
     } 
- } */
+ } 
  
 } 
+  
  
