@@ -403,11 +403,6 @@ public class Phonebook
    System.out.println("Thank you for using the phonebook!");
 
 }
-public static void displayByFirstName(BST list, String name) //make root public and implement method here
-{
-  list.displayByFirstName(name);
-} 
-
 
  //contacts by shared event method
  public static void contactsByEvent(LinkedListEvent list, String eventName, String dAndT)
@@ -427,6 +422,43 @@ public static void displayByFirstName(BST list, String name) //make root public 
     } 
  } 
  
+ //contacts that share a first name method
+ public static void displayByFirstName(BST list, String name) 
+ {
+  boolean flag = false;
+  BSTNode temp = list.getRoot();
+  while(temp != null)
+  { 
+    if(name.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' ')))) //first instance of first name is found, start traversal
+    { 
+      flag = true;
+      break;
+    }
+    else if(temp.getData().getName().compareTo(name) < 0)
+      temp = temp.getRight();
+    else if(temp.getData().getName().compareTo(name) > 0)
+      temp = temp.getLeft();
+  } 
+  if(flag)
+  {
+    Stack<BSTNode> s = new Stack<BSTNode>();  
+    while (temp != null || !s.empty())
+    {
+      while (temp !=  null)
+      { 
+        s.push(temp);
+        temp = temp.getLeft();
+      }
+      temp = s.pop();
+      if(name.equalsIgnoreCase(temp.getData().getName().substring(0, temp.getData().getName().indexOf(' '))))
+         System.out.println(temp.getData().toString());
+      temp = temp.getRight();
+    }
+  }
+ } 
+  
+ 
 } 
+  
   
  
