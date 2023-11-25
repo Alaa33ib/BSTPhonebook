@@ -1,8 +1,8 @@
 public class LinkedListEvent //LinkedList of Events
 {
 
-	private Node2 head;
-	private Node2 current;	
+	private Node<Event> head;
+	private Node<Event> current;	
 
 	public LinkedListEvent()
    {
@@ -41,13 +41,13 @@ public class LinkedListEvent //LinkedList of Events
 
 	public void insert(Event data)
    {
-	  Node2 temp;
+	  Node<Event> temp;
 	  if(isEmpty()) 
-       current = head = new Node2(data);
+       current = head = new Node<Event>(data);
 	  else 
      {
 		 temp = current.getNext();
-		 current.setNext(new Node2(data));
+		 current.setNext(new Node<Event>(data));
 		 current = current.getNext();
 		 current.setNext(temp);
 	  }
@@ -59,7 +59,7 @@ public class LinkedListEvent //LinkedList of Events
        head = head.getNext();
     	else 
       {
-    		Node2 temp = head;
+    		Node<Event> temp = head;
     		while(temp.getNext() != current)
             temp = temp.getNext();
     		temp.setNext(current.getNext());	
@@ -74,11 +74,14 @@ public class LinkedListEvent //LinkedList of Events
   
   public boolean isNotATimeConflict(String dateAndTime)
   {
-    Node2 temp = head; 
+    Node<Event> temp = head; 
     while(temp != null) 
     {
       if(temp.getData().getDateAndTime().equalsIgnoreCase(dateAndTime))
+      {
+        current = temp;
         return false;
+      }
       temp = temp.getNext();
     }
     return true;
@@ -86,7 +89,7 @@ public class LinkedListEvent //LinkedList of Events
 
   public void deleteAll(String attribute, String criteria) //deletes all instances of a contact associated with an event; used exclusively when deleting a contact
   {
-     Node2 tmp = head;
+     Node<Event> tmp = head;
      switch(criteria)
      {
       case "Name":
@@ -95,14 +98,15 @@ public class LinkedListEvent //LinkedList of Events
       {
         tmp.getData().getContactList().findFirst();
         while(!tmp.getData().getContactList().last())
-        {  if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute))
+        {  
+           if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute))
               tmp.getData().getContactList().remove();
            else
               tmp.getData().getContactList().findNext();
         }
-        if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute)) //checks last element
+        if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute))//checks last element
            tmp.getData().getContactList().remove();
-        if(tmp.getData().getContactList().isEmpty()) //Event's contact list is empty
+        if(tmp.getData().getContactList().isEmpty())//Event's contact list is empty
         {
            current = tmp;
            this.remove();
@@ -142,47 +146,44 @@ public class LinkedListEvent //LinkedList of Events
     public boolean searchE(String attribute, String criteria)
     {
       boolean flag = false; 
-      Node2 temp = current;
-     	current = head;
+      Node<Event> temp = head;
       
       switch(criteria) 
       {
 
-       case "Title": //this criteria will adjust current if found
+       case "Title": 
    
-       while(current != null)
+       while(temp != null)
        {
-     	   if(this.retrieve().getTitle().equalsIgnoreCase(attribute)) 
+     	   if(temp.getData().getTitle().equalsIgnoreCase(attribute)) 
          { 
-           System.out.println(this.retrieve().toString());
-           return true;
+           System.out.println(temp.getData().toString());
+           flag = true;
          }
-     	   current = current.getNext();
+     	   temp = temp.getNext();
      	 }
-     	 current = temp;
-     	 return false;
+     	 return flag;
        
       case "Contact Name":
       
-      Node2 tmp = head;
-      while(tmp != null)
+      while(temp != null)
       {
-        tmp.getData().getContactList().findFirst();
-        while(!tmp.getData().getContactList().last())
+        temp.getData().getContactList().findFirst();
+        while(!temp.getData().getContactList().last())
         {
-     	    if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute)) 
+     	    if(temp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute)) 
           { 
-            System.out.println(tmp.getData().toString());
+            System.out.println(temp.getData().toString());
             flag = true;
           }
-     	    tmp.getData().getContactList().findNext();
+     	    temp.getData().getContactList().findNext();
      	  }
-        if(tmp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute)) //checks last element
+        if(temp.getData().getContactList().retrieve().getName().equalsIgnoreCase(attribute)) //checks last element
         { 
-          System.out.println(tmp.getData().toString());
+          System.out.println(temp.getData().toString());
           flag = true;
         }
-       tmp = tmp.getNext();
+       temp = temp.getNext();
       }
       return flag;  
         
@@ -195,7 +196,7 @@ public class LinkedListEvent //LinkedList of Events
   
   public void insertEvent(Event data) //inserts event to event list
   {
-    Node2 ev = new Node2(data);
+    Node<Event> ev = new Node<Event>(data);
     if(isEmpty()) 
     { 
       current = head = ev;
@@ -209,7 +210,7 @@ public class LinkedListEvent //LinkedList of Events
     }
     else
     {
-      Node2 p = head, q = head.getNext();
+      Node<Event> p = head, q = head.getNext();
       while(p.getNext() != null)
      	{ if((data.compareTo(p.getData()) >= 0) && (data.compareTo(q.getData()) < 0))
           break;
@@ -227,7 +228,7 @@ public class LinkedListEvent //LinkedList of Events
        System.out.println("No events found!");
      else
      {
-       Node2 tmp = head;
+       Node<Event> tmp = head;
        while(tmp != null)
        {
          System.out.println(tmp.getData().toString());
@@ -238,7 +239,7 @@ public class LinkedListEvent //LinkedList of Events
    
    public boolean addContactToEvent(Contact contact) 
    {
-     if(this.retrieve().getContactList().search(contact.getName(), "Name") || this.retrieve().getContactList().search(contact.getPhone(), "Phone Number"))
+     if(this.retrieve().getContactList().search(contact.getName(), "Name"))
        return false; 
      else
      {
@@ -247,14 +248,14 @@ public class LinkedListEvent //LinkedList of Events
      }
    } 
    
-   public boolean deleteEvent(String title) //deletes a event from the list
+   public boolean deleteEvent(String title, String dt) //deletes a event from the list
    {
-      Node2 tmp = head;
-      Node2 prev = null;
+      Node<Event> tmp = head;
+      Node<Event> prev = null;
              
       while(tmp != null)
       {
-         if(tmp.getData().getTitle().equalsIgnoreCase(title))
+         if(tmp.getData().getTitle().equalsIgnoreCase(title) && tmp.getData().getDateAndTime().equalsIgnoreCase(dt))
          {
            if(tmp == head) 
            {
@@ -273,7 +274,25 @@ public class LinkedListEvent //LinkedList of Events
       }
       return false;
    }
- 
+   
+   public boolean searchEUnique(String title, String dateAndTime)
+   {
+      Node<Event> temp = current; 
+      current = head;
+   
+      while(current != null)
+      {
+     	   if(this.retrieve().getTitle().equalsIgnoreCase(title) && this.retrieve().getDateAndTime().equalsIgnoreCase(dateAndTime)) 
+         { 
+           System.out.println(this.retrieve().toString());
+           return true;
+         }
+     	   current = current.getNext();
+     	}
+      current = temp;
+     	return false; 
+   }
+   
 }
 
 
