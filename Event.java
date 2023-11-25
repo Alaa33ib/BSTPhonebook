@@ -1,18 +1,20 @@
 public class Event implements Comparable 
 {
     private String title, dateAndTime, location;
-    public LinkedListContact contactList = new LinkedListContact(); //contacts associated with each event
+    private boolean isEvent;
+    private LinkedListContact contactList = new LinkedListContact(); //contacts associated with each event
 
     public Event() //default constructor
     {
        title = dateAndTime = location = "";
     }
 
-    public Event(String title, Contact contact, String dateAndTime, String location) 
+    public Event(String title, Contact contact, String dateAndTime, String location, boolean isEvent) 
     {
         this.title = title;
         this.dateAndTime = dateAndTime;
         this.location = location;
+        this.isEvent = isEvent;
         contactList.insertContact(contact);
     }
 
@@ -31,6 +33,11 @@ public class Event implements Comparable
         return location;
     }
     
+    public boolean getType()
+    {
+        return isEvent;
+    }
+    
     public LinkedListContact getContactList()
     {
         return contactList;
@@ -38,7 +45,7 @@ public class Event implements Comparable
  
     public String toString() 
     {
-        return  "Title: " + title + " - Date and Time: " + dateAndTime +  " - Location: " + location;
+        return  "Title: " + title + " - Date and Time: " + dateAndTime +  " - Location: " + location + " - Type: " + ((isEvent)?"Event":"Appointment");
     }
 
     public int compareTo(Object s) 
