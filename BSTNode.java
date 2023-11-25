@@ -1,4 +1,4 @@
-public class BSTNode //Nodes that contain Contact as data
+public class BSTNode implements Comparable //Nodes that contain Contact as data
 {
 
    private Contact data;
@@ -20,16 +20,16 @@ public class BSTNode //Nodes that contain Contact as data
       key = k;
    }
 
-   public int compareTo(Object s) //compares contact names alphabetically
+   public int compareTo(Object s)//compares key in node to key sent as a parameter
    {
      String str = (String)s;
-     int firstLength = this.getData().getName().length();  
+     int firstLength = this.key.length();  
      int secondLength = str.length();  
      int minLength = Math.min(firstLength, secondLength);
      int i = 0;  
      while(i < minLength) 
      {  
-      char ch1 = this.getData().getName().charAt(i);  
+      char ch1 = this.key.charAt(i);  
       char ch2 = str.charAt(i);  
       if(ch1 != ch2) 
       {  
@@ -76,6 +76,11 @@ public class BSTNode //Nodes that contain Contact as data
    public void setKey(String k)
    {
      key = k;
+   }
+   
+   public void setData(Contact s)
+   {
+     data = s;
    }
 
 }
