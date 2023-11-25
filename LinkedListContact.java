@@ -1,8 +1,8 @@
 public class LinkedListContact //LinkedList of contacts to be stored in an Event
 {
 
-	private Node1 head;
-	private Node1 current;	
+	private Node<Contact> head;
+	private Node<Contact> current;	
 
 	public LinkedListContact()
    {
@@ -41,13 +41,13 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
 
 	public void insert(Contact data)
    {
-	  Node1 temp;
+	  Node<Contact> temp;
 	  if(isEmpty()) 
-       current = head = new Node1(data);
+       current = head = new Node<Contact>(data);
 	  else 
      {
 		 temp = current.getNext();
-		 current.setNext(new Node1(data));
+		 current.setNext(new Node<Contact>(data));
 		 current = current.getNext();
 		 current.setNext(temp);
 	  }
@@ -59,7 +59,7 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
        head = head.getNext();
     	else 
       {
-    		Node1 temp = head;
+    		Node<Contact> temp = head;
     		while(temp.getNext() != current)
          {
     			temp = temp.getNext();
@@ -76,8 +76,8 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
     
     public boolean deleteContact(String attribute, String criteria) //deletes a contact from the list
     {
-      Node1 tmp = head;
-      Node1 prev = null;
+      Node<Contact> tmp = head;
+      Node<Contact> prev = null;
       switch(criteria)
       {
        case "Name":
@@ -133,7 +133,7 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
     public boolean search(String attribute, String criteria) //searches for a contact in the list based on a specific criteria
     {
       boolean flag = false; 
-      Node1 temp = current;
+      Node<Contact> temp = current;
      	current = head;
       
       switch(criteria) 
@@ -220,7 +220,7 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
   
   public void insertContact(Contact data) //inserts a contact into the list alphabetically 
   {
-    Node1 con = new Node1(data);
+    Node<Contact> con = new Node<Contact>(data);
     if(isEmpty()) 
     { 
       current = head = con;
@@ -234,7 +234,7 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
     }
     else
     {
-      Node1 p = head, q = head.getNext();
+      Node<Contact> p = head, q = head.getNext();
       while(p.getNext() != null)
      	{ if((data.compareTo(p.getData()) >= 0) && (data.compareTo(q.getData()) < 0))
           break;
@@ -248,7 +248,7 @@ public class LinkedListContact //LinkedList of contacts to be stored in an Event
   
   public void display() //displays all contacts in the list; for testing purposes only
   {
-     Node1 tmp = head;
+     Node<Contact> tmp = head;
      while(tmp != null)
      {
        System.out.println(tmp.getData().toString());
