@@ -15,21 +15,23 @@ public class Phonebook
    
    do 
    {
-      System.out.println("Please choose an option:");
-      System.out.println("1.Add a contact");
-      System.out.println("2.Search for a contact");
-      System.out.println("3.Delete a contact");
-      System.out.println("4.Schedule an event/appointment");
-      System.out.println("5.Print event/appointment details");
-      System.out.println("6.Print contacts by first name");
-      System.out.println("7.Print all events and appointments alphabetically");
-      System.out.println("8.Print contacts attending an event");
-      System.out.println("9.Add a contact to a scheduled event");
-      System.out.println("10.Delete a scheduled event or appointment");
-      System.out.println("11.Print all contacts in phonebook");
-      System.out.println("12.Exit");
-      System.out.println();
-      System.out.print("Enter your choice: ");
+     System.out.println("Please choose an option:");
+     System.out.println("1.Add a contact");
+     System.out.println("2.Search for a contact");
+     System.out.println("3.Delete a contact");
+     System.out.println("4.Schedule an event/appointment");
+     System.out.println("5.Print event/appointment details");
+     System.out.println("6.Print contacts by first name");
+     System.out.println("7.Print all events and appointments alphabetically");
+     System.out.println("8.Print contacts attending an event");
+     System.out.println("9.Add a contact to a scheduled event");
+     System.out.println("10.Delete a scheduled event or appointment");
+     System.out.println("11.Print all contacts in phonebook");
+     System.out.println("12.Exit");
+     System.out.println();
+     System.out.print("Enter your choice: ");
+     try
+     {
       int criteria = key.nextInt();
       
       
@@ -39,6 +41,19 @@ public class Phonebook
         
         System.out.print("Enter the contact's name(FirstName LastName): ");
         String name = key.next();
+        if(!isAllLetters(name)) 
+          continue;
+        boolean hasSpace = false;
+        for(int i=0; i<name.length(); i++)
+        {
+          if(name.charAt(i) == ' ') 
+            hasSpace = true;
+        } 
+        if(!hasSpace) 
+        {
+          System.out.println("\nPlease enter name as follows: FirstName LastName\n");
+          continue;
+        }
         if(Phonebook.search(name, "Name")) 
         {
           System.out.println("Contact already exists in phonebook, look above, addition is rejected.\n");
@@ -46,6 +61,8 @@ public class Phonebook
         } 
         System.out.print("Enter the contact's phone number: ");
         String phoneNum = key.next();
+        if(!isInt(phoneNum))
+           continue;
         if(Phonebook.search(phoneNum, "Phone Number"))
         {
            System.out.println("Contact already exists in phonebook, look above, addition is rejected.\n");
@@ -83,6 +100,8 @@ public class Phonebook
             
             System.out.print("Enter the contact's name: ");
             name = key.next();
+            if(!isAllLetters(name)) 
+               continue;
             System.out.println();
             if(!Phonebook.search(name, "Name")) //case it is found will be printed by the method itself! 
               System.out.println("Contact not found!");
@@ -95,6 +114,8 @@ public class Phonebook
             
             System.out.print("Enter the contact's phone number: ");
             phoneNum = key.next();
+            if(!isInt(phoneNum)) 
+               continue;
             System.out.println();
             if(!Phonebook.search(phoneNum, "Phone Number")) //case it is found will be printed by the method itself!
                System.out.println("Contact not found!"); 
@@ -152,6 +173,8 @@ public class Phonebook
          
          System.out.print("Enter the contact's name: ");
          name = key.next();
+         if(!isAllLetters(name)) 
+            continue;
          System.out.println();
          if(Phonebook.deleteContact(name)) //method will look for the contact that will be deleted and return true if the operation is successful
          { 
@@ -230,7 +253,9 @@ public class Phonebook
            System.out.print("Enter the appointment's title: ");
            String title = key.next();
            System.out.print("Enter the contact's name: ");
-           String contactName = key.next();          
+           String contactName = key.next(); 
+           if(!isAllLetters(contactName)) 
+              continue;         
            System.out.print("Enter the appointments's date and time(MM/DD/YYYY HH:MM): ");
            String dateAndTime = key.next();
            System.out.print("Enter the appointments's location: ");
@@ -250,6 +275,8 @@ public class Phonebook
            else
               System.out.println("Appointment couldn't be scheduled because of a time conflict!");           
          }
+         else
+           System.out.println("Please enter either 1 or 2!");                  
         System.out.println();
         break; 
         
@@ -281,7 +308,9 @@ public class Phonebook
          System.out.println();
          if(!Events.searchE(title, "Title")) //case it is found will be printed by the method itself 
            System.out.println("Event/appointment not found!"); 
-        } 
+        }
+        else
+          System.out.println("Please enter either 1 or 2!");                  
         System.out.println();   
         break; 
         
@@ -290,6 +319,8 @@ public class Phonebook
         
         System.out.print("Enter the first name: ");
         name = key.next();
+        if(!isAllLetters(name)) 
+           continue;
         System.out.println();
         displayByFirstName(Phonebook, name); 
         System.out.println();
@@ -396,9 +427,16 @@ public class Phonebook
         
         System.out.println();
         System.out.println("You entered a number outside the allowed range, try again!\n");
-        break;
+        break; 
       }
-   }while(menuFlag);
+     }
+     catch(InputMismatchException e)
+     {
+        System.out.println("\nPlease make sure your input is an integer(s)!\n");
+        String gar = key.next();
+        continue;
+     }
+   }while(menuFlag); 
    
    System.out.println("Thank you for using the phonebook!");
 
@@ -456,9 +494,41 @@ public class Phonebook
     }
   }
  } 
+ 
   
+ //input validation method for names
+ public static boolean isAllLetters(String name)
+ { 
+   for (int i=0; i<name.length(); i++) 
+    {
+      if(name.charAt(i) != ' ')
+      {
+        if(name.charAt(i)<'A' || name.charAt(i)>'z') 
+        {  
+          System.out.println("\nPlease enter letters only for the name.\n");
+          return false;
+        }
+      }
+    }
+    return true;
+ } 
+ 
+  //input validation method for phone numbers
+ public static boolean isInt(String num)
+ {
+   if(num == null)
+     return false;
+   try 
+   {
+     int n = Integer.parseInt(num);
+   } 
+   catch (NumberFormatException e) 
+   {
+      System.out.println("\nPlease enter numbers only.\n");
+      return false;  
+   }
+   return true;
+ }
  
 } 
   
-  
- 
